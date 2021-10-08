@@ -1,0 +1,41 @@
+## sample files
+samples: "../samples.tsv"
+units: "../units.tsv"
+reheader: "../reheader.tsv"
+internal_sid: "LIMS"
+
+
+## references
+# human genome
+genome_reference:
+    basepath: "../data/reads"
+    provider: "ucsc"
+    release: "hg19"
+genome_fasta: "hg19.fasta"
+
+# miRNA dbs
+mirna_ref: "../data/ref/miRNA/miRBase_main_mature.fasta"
+mirna_ref_precursors: "../data/ref/miRNA/miRBase_main_precursors.fasta"
+mirna_other: "../data/ref/miRNA/miRBase_other_mature.fasta"
+
+##TODO: how to download and prepare this file
+htseq_gff: "../data/ref/gff_file"
+
+
+rules:
+    trim_galore_se:
+        params: "--small_rna --dont_gzip --max_length 30 --length 18 "
+    multiqc:
+        arguments: "--force "
+#    mirdeep2_alignment:
+#        params: "-e -h -j -l 18 -m -v"
+#    mirdeep2_identification:
+#        params: "-t hsa -P -b 0 -v"
+#    fastq_screen:
+#        params: "../data/fastq_screen.config"
+    bowtie_mapping:
+        params: "-n 1 -l 32 --norc --best --strata -m 1"
+    mir_trace:
+        params: "-s hsa"
+    htseq:
+        params: "-f bam -r pos -t miRNA -i Name"
