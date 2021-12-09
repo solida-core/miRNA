@@ -1,8 +1,8 @@
 
 rule umi_dedup:
     input:
-       bam="reads/aligned/{sample}.mirna.bam",
-       bai="reads/aligned/{sample}.mirna.bam.bai"
+        bam="reads/aligned/{sample}.mirna.bam",
+        bai="reads/aligned/{sample}.mirna.bam.bai"
     output:
         "reads/dedup/{sample}.mirna_dedup.bam"
     conda:
@@ -17,8 +17,9 @@ rule umi_dedup:
         "--log={log} "
 
 
-rule samtools_count:
 
+
+rule samtools_count:
     input:
         bam="reads/dedup/{sample}.mirna_dedup.bam",
         bai="reads/dedup/{sample}.mirna_dedup.bam.bai"
@@ -34,6 +35,7 @@ rule samtools_count:
     shell:
         "samtools idxstats {input.bam} | cut -f 1,3 "
         "> {output.counts} "
+
 
 
 rule htseq:

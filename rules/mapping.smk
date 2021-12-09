@@ -7,8 +7,10 @@ rule mapping_miRBase_mature:
         sam="reads/aligned/{sample}.mirbase_mature.sam",
         fastq="reads/unaligned/{sample}.mirbase_mature.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping")=="NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("mirna_mature"))
+    log:
+        "logs/bowtie/{sample}_mapping_mature.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -20,6 +22,7 @@ rule mapping_miRBase_mature:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log}"
 
 
 rule mapping_miRBase_hairpin:
@@ -29,8 +32,10 @@ rule mapping_miRBase_hairpin:
         sam="reads/aligned/{sample}.mirbase_hairpin.sam",
         fastq="reads/unaligned/{sample}.mirbase_hairpin.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping") == "NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("mirna_hairpin"))
+    log:
+        "logs/bowtie/{sample}_mapping_hairpin.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -42,6 +47,7 @@ rule mapping_miRBase_hairpin:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log}"
 
 
 rule mapping_piRNA:
@@ -51,8 +57,10 @@ rule mapping_piRNA:
         sam="reads/aligned/{sample}.piRNA.sam",
         fastq="reads/unaligned/{sample}.piRNA.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping") == "NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("pirna"))
+    log:
+        "logs/bowtie/{sample}_mapping_pirna.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -64,6 +72,7 @@ rule mapping_piRNA:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log} "
 
 
 rule mapping_tRNA:
@@ -73,8 +82,10 @@ rule mapping_tRNA:
         sam="reads/aligned/{sample}.tRNA.sam",
         fastq="reads/unaligned/{sample}.tRNA.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping") == "NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("trna"))
+    log:
+        "logs/bowtie/{sample}_mapping_trna.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -86,6 +97,7 @@ rule mapping_tRNA:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log}"
 
 
 rule mapping_rRNA:
@@ -95,8 +107,10 @@ rule mapping_rRNA:
         sam="reads/aligned/{sample}.rRNA.sam",
         fastq="reads/unaligned/{sample}.rRNA.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping") == "NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("rrna"))
+    log:
+        "logs/bowtie/{sample}_mapping_rrna.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -108,6 +122,7 @@ rule mapping_rRNA:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log} "
 
 
 rule mapping_mRNA:
@@ -117,8 +132,10 @@ rule mapping_mRNA:
         sam="reads/aligned/{sample}.mRNA.sam",
         fastq="reads/unaligned/{sample}.mRNA.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping") == "NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("mrna"))
+    log:
+        "logs/bowtie/{sample}_mapping_mrna.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -130,6 +147,7 @@ rule mapping_mRNA:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log} "
 
 
 rule mapping_other:
@@ -139,8 +157,10 @@ rule mapping_other:
         sam="reads/aligned/{sample}.other_miRNA.sam",
         fastq="reads/unaligned/{sample}.other_miRNA.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("strict_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("strict_params" if config.get("allow_multimapping") == "NO" else "strict_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("other_mirna"))
+    log:
+        "logs/bowtie/{sample}_mapping_other.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -152,6 +172,7 @@ rule mapping_other:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log} "
 
 
 rule mapping_miRBase_mature2:
@@ -161,8 +182,10 @@ rule mapping_miRBase_mature2:
         sam="reads/aligned/{sample}.mirbase_mature2.sam",
         fastq="reads/unaligned/{sample}.mirbase_mature2.fastq"
     params:
-        params=config.get("rules").get("bowtie_mapping").get("mismatch_params"),
-        basename="ucsc_hg19"
+        params=config.get("rules").get("bowtie_mapping").get("mismatch_params" if config.get("allow_multimapping") == "NO" else "mismatch_multimap_params"),
+        basename=resolve_single_filepath(*references_abs_path(), config.get("mirna_mature"))
+    log:
+        "logs/bowtie/{sample}_mapping_mature2.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -174,6 +197,7 @@ rule mapping_miRBase_mature2:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log} "
 
 
 rule mapping_genome:
@@ -184,7 +208,9 @@ rule mapping_genome:
         fastq="reads/unaligned/{sample}.genome.fastq"
     params:
         params=config.get("rules").get("bowtie_mapping").get("genome_params"),
-        basename="ucsc_hg19"
+        basename=resolve_single_filepath(*references_abs_path(), config.get("genome"))
+    log:
+        "logs/bowtie/{sample}_mapping_genome.txt"
     threads: pipeline_cpu_count()
     conda:
         "../envs/bowtie.yaml"
@@ -196,3 +222,4 @@ rule mapping_genome:
         "{input} "
         "--un {output.fastq} "
         "-S {output.sam} "
+        ">& {log} "

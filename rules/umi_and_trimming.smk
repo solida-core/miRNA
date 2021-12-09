@@ -2,9 +2,15 @@ def get_fastq(wildcards,samples,read_pair='fq'):
     return samples.loc[wildcards.sample,
                      [read_pair]].dropna()[0]
 
+def get_unit_fastqs(wildcards, samples, label='units',read_pair='fq'):
+    for unit_set in samples.loc[wildcards.sample,[label]]:
+        print(wildcards.sample)
+    return [units.loc[x,[read_pair]].dropna()[0] for x in unit_set.split(',')]
+
+
 rule UMI_tools:
     input:
-        lambda wildcards: get_fastq(wildcards, samples, read_pair="fq1")
+        lambda wildcards: get_unit_fastqs(wildcards, samples, read_pair="fq1")
     output:
         "reads/umi_extract/{sample}_umi.fastq.gz"
     conda:
@@ -28,12 +34,12 @@ rule pre_rename_fastq_se:
     output:
         r1="reads/untrimmed/{sample}.fastq.gz"
     shell:
-        "ln -s {input.r1} {output.r1}"
+        "cp {input.r1} {output.r1}"
 
 
 rule trim_galore_se:
     input:
-        "reads/untrimmed/{sample}.fastq.gz"
+        rules.pre_rename_fastq_se.output.r1
     output:
         "reads/trimmed/{sample}_trimmed.fq",
         "reads/trimmed/{sample}.fastq.gz_trimming_report.txt"
@@ -64,5 +70,3 @@ rule post_rename_fastq_se:
         r1="reads/trimmed/{sample}-trimmed.fq"
     shell:
         "mv {input[0]} {output.r1} "
-
-

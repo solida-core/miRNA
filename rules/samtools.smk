@@ -7,18 +7,15 @@
 ## conta
 rule samtools_sam_to_bam:
     input:
-        first="reads/aligned/{sample}.mirbase_mature.sam",
-        second="reads/aligned/{sample}.mirbase_mature2.sam"
+        first="reads/aligned/{sample}.mirbase_mature.sam"
     output:
-        first="reads/aligned/{sample}.mirbase_mature.bam",
-        second="reads/aligned/{sample}.mirbase_mature2.bam"
+        first="reads/aligned/{sample}.mirbase_mature.bam"
     conda:
         "../envs/samtools.yaml"
     benchmark:
         "benchmarks/samtools/sam_to_bam/{sample}.txt"
     params:
-        genome=resolve_single_filepath(*references_abs_path(),
-                                       config.get("genome_fasta")),
+        genome=config.get("mirna_mature_fa"),
         output_fmt="BAM"
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
     shell:
@@ -27,7 +24,22 @@ rule samtools_sam_to_bam:
         "-T {params.genome} "
         "-o {output.first} "
         "-O {params.output_fmt} "
-        "{input.first} && "
+        "{input.first} "
+
+rule samtools_sam_to_bam_second:
+    input:
+        second="reads/aligned/{sample}.mirbase_mature2.sam"
+    output:
+        second="reads/aligned/{sample}.mirbase_mature2.bam"
+    conda:
+        "../envs/samtools.yaml"
+    benchmark:
+        "benchmarks/samtools/sam_to_bam/{sample}.txt"
+    params:
+        genome=config.get("mirna_mature_fa"),
+        output_fmt="BAM"
+    threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
+    shell:
         "samtools view -b "
         "--threads {threads} "
         "-T {params.genome} "
@@ -37,40 +49,55 @@ rule samtools_sam_to_bam:
 
 
 rule samtools_sort:
-   input:
-       first="reads/aligned/{sample}.mirbase_mature.bam",
-       second="reads/aligned/{sample}.mirbase_mature2.bam"
-   output:
-       first="reads/aligned/{sample}.mirbase_mature.sorted.bam",
-       second="reads/aligned/{sample}.mirbase_mature2.sorted.bam"
-   conda:
-       "../envs/samtools.yaml"
-   params:
-       tmp_dir=tmp_path(path=config.get("tmp_dir")),
-       genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
-       output_fmt="CRAM"
-   benchmark:
-       "benchmarks/samtools/sort/{sample}.txt"
-   threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
-   shell:
-       "samtools sort "
-       "--threads {threads} "
-       "-T {params.tmp_dir} "
-       "-O {params.output_fmt} "
-       "--reference {params.genome} "
-       "-o {output.first} "
-       "{input.first} && "
-       "samtools sort "
-       "--threads {threads} "
-       "-T {params.tmp_dir} "
-       "-O {params.output_fmt} "
-       "--reference {params.genome} "
-       "-o {output.second} "
-       "{input.second} "
+    input:
+        first="reads/aligned/{sample}.mirbase_mature.bam"
+    output:
+        first="reads/aligned/{sample}.mirbase_mature.sorted.bam"
+    conda:
+        "../envs/samtools.yaml"
+    params:
+        tmp_dir=tmp_path(path=config.get("tmp_dir")),
+        genome=config.get("mirna_mature_fa"),
+        output_fmt="CRAM"
+    benchmark:
+        "benchmarks/samtools/sort/{sample}.txt"
+    threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
+    shell:
+        "samtools sort "
+        "--threads {threads} "
+        "-T {params.tmp_dir} "
+        "-O {params.output_fmt} "
+        "--reference {params.genome} "
+        "-o {output.first} "
+        "{input.first} "
+
+
+
+rule samtools_sort_second:
+    input:
+        second="reads/aligned/{sample}.mirbase_mature2.bam"
+    output:
+        second="reads/aligned/{sample}.mirbase_mature2.sorted.bam"
+    conda:
+        "../envs/samtools.yaml"
+    params:
+        tmp_dir=tmp_path(path=config.get("tmp_dir")),
+        genome=config.get("mirna_mature_fa"),
+        output_fmt="CRAM"
+    benchmark:
+        "benchmarks/samtools/sort/{sample}.txt"
+    threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
+    shell:
+        "samtools sort "
+        "--threads {threads} "
+        "-T {params.tmp_dir} "
+        "-O {params.output_fmt} "
+        "--reference {params.genome} "
+        "-o {output.second} "
+        "{input.second} "
 
 
 rule samtools_merge:
-
     input:
         first = "reads/aligned/{sample}.mirbase_mature.sorted.bam",
         second = "reads/aligned/{sample}.mirbase_mature2.sorted.bam"
@@ -82,7 +109,7 @@ rule samtools_merge:
         "benchmarks/samtools/merge/{sample}.txt"
     params:
         cmd='samtools',
-        genome=resolve_single_filepath(*references_abs_path(), config.get("genome_fasta")),
+        genome=config.get("mirna_mature_fa"),
         output_fmt="BAM"
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
     shell:
@@ -116,4 +143,3 @@ rule index_deduplicated:
     shell:
         "samtools index "
         "{input}"
-

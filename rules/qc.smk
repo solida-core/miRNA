@@ -1,6 +1,7 @@
 rule fastqc:
     input:
-        "reads/untrimmed/{sample}.fq.gz"
+        lambda wildcards: get_fastq(wildcards, samples, read_pair="fq1")
+#        "reads/untrimmed/{sample}.fastq.gz"
     output:
         html="qc/fastqc/untrimmed_{sample}.html",
         zip="qc/fastqc/untrimmed_{sample}_fastqc.zip"
@@ -16,6 +17,7 @@ rule fastqc:
         "--outdir {params.outdir} "
         "--quiet "
         ">& {log}"
+
 
 
 rule fastqc_umi_extract:
@@ -38,6 +40,7 @@ rule fastqc_umi_extract:
         ">& {log}"
 
 
+
 rule fastqc_trimmed:
     input:
         "reads/trimmed/{sample}-trimmed.fq"
@@ -56,6 +59,7 @@ rule fastqc_trimmed:
         "--outdir {params.outdir} "
         "--quiet "
         ">& {log}"
+
 
 
 rule mir_trace:
@@ -81,9 +85,10 @@ rule mir_trace:
         "{params.params} "
 
 
+
 rule multiqc:
     input:
-        expand("qc/fastqc/untrimmed_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
+#        expand("qc/fastqc/untrimmed_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
         expand("qc/fastqc/umi_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
         expand("qc/fastqc/trimmed_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
         expand("reads/trimmed/{sample.sample}.fastq.gz_trimming_report.txt", sample=samples.reset_index().itertuples()),
@@ -91,7 +96,7 @@ rule multiqc:
         expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-length.tsv", sample=samples.reset_index().itertuples()),
         expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-contamination_basic.tsv", sample=samples.reset_index().itertuples()),
         expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-mirna-complexity.tsv", sample=samples.reset_index().itertuples()),
-        expand("htseq/{sample.sample}.counts", sample=samples.reset_index().itertuples())
+#        expand("htseq/{sample.sample}.counts", sample=samples.reset_index().itertuples())
 
     output:
         "qc/multiqc.html"
@@ -116,4 +121,3 @@ rule multiqc:
         "-n {params.outname} "
         "--sample-names {params.reheader} "
         ">& {log}"
-
