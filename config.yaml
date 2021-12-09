@@ -4,7 +4,7 @@ units: "../units.tsv"
 reheader: "../reheader.tsv"
 internal_sid: "LIMS"
 
-
+allow_multimapping: "NO" # YES
 ## references
 # human genome
 genome_reference:
@@ -14,15 +14,16 @@ genome_reference:
 genome_fasta: "hg38.fasta"
 # miRNA dbs index names
 mirna_mature: "hsa_mature"
+mirna_mature_fa: "mirbase_mature_full_path.fastq"
 mirna_hairpin: "hsa_hairpin"
 pirna: "hsa_pirna"
 trna: "hsa_trna"
 rrna: "hsa_rrna"
 mrna: "hsa_mrna"
-other_mirna: "other_mirna"
+other_mirna: "other_mirna_mature_from_mirbase"
 genome: "hsa_genome"
 ###
-htseq_gff: "../data/ref/gff_file"
+htseq_gff: "gff_file"
 
 
 rules:
@@ -30,15 +31,11 @@ rules:
         params: "--small_rna --dont_gzip --max_length 30 --length 16 "
     multiqc:
         arguments: "--force "
-#    mirdeep2_alignment:
-#        params: "-e -h -j -l 18 -m -v"
-#    mirdeep2_identification:
-#        params: "-t hsa -P -b 0 -v"
-#    fastq_screen:
-#        params: "../data/fastq_screen.config"
     bowtie_mapping:
         strict_params: "-n 0 -l 30 --norc --best --strata -m 1"
+        strict_multimap_params: "-n 0 -l 30 --norc -m 10 -a "
         mismatch_params: "-n 2 -l 30 --norc --best --strata -m 1"
+        mismatch_multimap_params: "-n 2 -l 30 --norc -m 10 -a "
         genome_params: "-n 1 -l 30 --norc --best --strata -m 1"
     mir_trace:
         params: "-s hsa"

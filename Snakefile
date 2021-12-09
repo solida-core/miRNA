@@ -1,5 +1,4 @@
 import pandas as pd
-# from snakemake.utils import validate, min_version
 
 ## USER FILES ##
 samples = pd.read_csv(config["samples"], index_col="sample", sep="\t")
@@ -14,8 +13,12 @@ localrules: all, pre_rename_fastq_se, post_rename_fastq_se
 
 rule all:
     input:
-        "qc/multiqc.html"
-        # expand("htseq/{sample.sample}.counts", sample=samples.reset_index().itertuples())
+        "qc/multiqc.html",
+        # expand("htseq/{sample.sample}.counts", sample=samples.reset_index().itertuples()),
+        expand("reads/dedup/{sample.sample}.mirna_dedup.bam.bai", sample=samples.reset_index().itertuples()),
+        expand("reads/counts/{sample.sample}.mirna.txt", sample=samples.reset_index().itertuples())
+
+
 
 
 ### rules inclusion
@@ -29,6 +32,6 @@ include:
 include:
     include_prefix + "/mapping.smk"
 include:
-    include_prefix + "/htseq.smk"
-# include:
-#     include_prefix + "/discovering.smk"
+    include_prefix + "/samtools.smk"
+include:
+    include_prefix + "/count_mirna.smk"
