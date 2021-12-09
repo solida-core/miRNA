@@ -3,6 +3,5 @@ channels:
 - conda-forge
 - defaults
 dependencies:
-- python==3.8
-- snakemake
+- snakemake=5.14
 - drmaa==0.7.9
