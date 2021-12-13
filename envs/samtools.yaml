@@ -1,8 +1,5 @@
 channels:
-  - bioconda
-  - conda-forge
-  - defaults
+ - bioconda
+ - conda-forge
 dependencies:
-  - python=3.6
-  - samtools
-  - openssl=1.0
+ - samtools

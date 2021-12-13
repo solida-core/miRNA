@@ -1,7 +1,6 @@
 channels:
   - bioconda
+  - conda-forge
+  - anaconda
 dependencies:
-  - python=3.6
-  - bowtie=1.2.1.1
-  - samtools
-  - openssl=1.0
+ - bowtie
