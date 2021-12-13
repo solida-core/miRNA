@@ -28,7 +28,7 @@ htseq_gff: "gff_file"
 
 rules:
     trim_galore_se:
-        params: "--small_rna --dont_gzip --max_length 30 --length 16 "
+        arguments: "--small_rna --dont_gzip --max_length 30 --length 16 "
     multiqc:
         arguments: "--force "
     bowtie_mapping:
