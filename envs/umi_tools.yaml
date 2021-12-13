@@ -5,4 +5,4 @@ channels:
   - defaults
 dependencies:
   - python=3.7
-  - umi_tools=1.1.1
+  - umi_tools=1.1.0
