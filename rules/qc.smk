@@ -24,8 +24,8 @@ rule fastqc_umi_extract:
     input:
         "reads/umi_extract/{sample}_umi.fastq.gz"
     output:
-        html="qc/fastqc/umi_{sample}.html",
-        zip="qc/fastqc/umi_{sample}_fastqc.zip"
+        html="qc/fastqc/{sample}_umi_fastqc.html",
+        zip="qc/fastqc/{sample}_umi_fastqc.zip"
     log:
         "logs/fastqc/umi/{sample}.log"
     params:
@@ -45,8 +45,8 @@ rule fastqc_trimmed:
     input:
         "reads/trimmed/{sample}-trimmed.fq"
     output:
-        html="qc/fastqc/trimmed_{sample}.html",
-        zip="qc/fastqc/trimmed_{sample}_fastqc.zip"
+        html="qc/fastqc/{sample}-trimmed_fastqc.html",
+        zip="qc/fastqc/trimmed_{sample}-trimmed_fastqc.zip"
     log:
         "logs/fastqc/trimmed/{sample}.log"
     params:
@@ -76,6 +76,8 @@ rule mir_trace:
         outdir="mir_trace/{sample}",
         params="--force",
         species=config.get("rules").get("mir_trace").get("params")
+    log:
+        "logs/mirtrace/{sample}.mirtrace_qc.log"
     shell:
         "mirtrace "
         "qc "
@@ -83,14 +85,15 @@ rule mir_trace:
         "-o {params.outdir} "
         "{input} "
         "{params.params} "
+        ">& {log} "
 
 
 
 rule multiqc:
     input:
 #        expand("qc/fastqc/untrimmed_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
-        expand("qc/fastqc/umi_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
-        expand("qc/fastqc/trimmed_{sample.sample}_fastqc.zip", sample=samples.reset_index().itertuples()),
+        expand("qc/fastqc/{sample.sample}_umi_fastqc.zip", sample=samples.reset_index().itertuples()),
+        expand("qc/fastqc/{sample.sample}-trimmed_fastqc.zip", sample=samples.reset_index().itertuples()),
         expand("reads/trimmed/{sample.sample}.fastq.gz_trimming_report.txt", sample=samples.reset_index().itertuples()),
         expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-results.json", sample=samples.reset_index().itertuples()),
         expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-length.tsv", sample=samples.reset_index().itertuples()),
