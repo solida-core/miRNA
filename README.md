@@ -3,9 +3,9 @@ miRNA analysis pipeline
 
 This Snakemake-based workflow was designed with the aim of enable reproducible analysis of miRNA NGS data.
 
-As the QIAseq miRNA Library Kit (QIAGEN) was used in our lab, the pipeline is configuread for managing UMIs present in the read as suggested by the manufacturer. Anyway, few changes would allow data anlysis from different kits.
+As the QIAseq miRNA Library Kit (QIAGEN) was used in our lab, the pipeline is configured for managing UMIs present in the read as suggested by the manufacturer. Anyway, few changes would allow data anlysis from different kits.
 
-The pipeline can be considered as a hybrid solution between common state-of-the-art literature and Qiagen analysis guidelines.
+The pipeline can be considered as a hybrid solution between common state-of-the-art literature, as reported in [Potla et al.](https://doi.org/10.1016/j.ocarto.2020.100131) and Qiagen analysis guidelines.
 
 
 ## Requirements
@@ -30,8 +30,15 @@ Once the virtual environment is ready, activate it and check the correct install
 conda activate MYENV_NAME
 snakemake --version
 ```
+## Run the Pipeline
+To run the pipeline you need to edit manually the `config.yaml` file, providing paths for your references.
+```bash
+snakemake --configfile config.yaml --snakefile Snakefile --use-conda -d ANALYSIS_DIR
+```
 
-###
+
+
+## Pipeline Description
 The workflow consists of 6 main steps:
 1. Get UMI: Qiagen UMIs are integrated in the read sequence, near the 3' adapter. To identify the 12 bases sequence of the UMI we use UMI_tools which allow to search the adapter sequence, discard it and keep the UMI sequence, includeing it in the header of the read. 
 2. Trimming: TrimGalore is used for quality trimming and read length selection (default min read length is set to 16, max to 30). These values can be edited in the config.yaml file.
