@@ -102,7 +102,7 @@ rule multiqc:
 #        expand("htseq/{sample.sample}.counts", sample=samples.reset_index().itertuples())
 
     output:
-        "qc/multiqc.html"
+        report("qc/multiqc.html",caption="../report/multiqc.rst", category="QC")
     params:
         params=config.get("rules").get("multiqc").get("arguments"),
         outdir="qc",
