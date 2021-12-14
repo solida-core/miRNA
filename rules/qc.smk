@@ -46,7 +46,7 @@ rule fastqc_trimmed:
         "reads/trimmed/{sample}-trimmed.fq"
     output:
         html="qc/fastqc/{sample}-trimmed_fastqc.html",
-        zip="qc/fastqc/trimmed_{sample}-trimmed_fastqc.zip"
+        zip="qc/fastqc/{sample}-trimmed_fastqc.zip"
     log:
         "logs/fastqc/trimmed/{sample}.log"
     params:
