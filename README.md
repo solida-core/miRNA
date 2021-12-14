@@ -5,7 +5,7 @@ This Snakemake-based workflow was designed with the aim of enable reproducible a
 
 As the QIAseq miRNA Library Kit (QIAGEN) was used in our lab, the pipeline is configured for managing UMIs present in the read as suggested by the manufacturer. Anyway, few changes would allow data anlysis from different kits.
 
-The pipeline can be considered as a hybrid solution between common state-of-the-art literature, as reported in [Potla et al.](https://doi.org/10.1016/j.ocarto.2020.100131) and Qiagen analysis guidelines.
+The pipeline can be considered as a hybrid solution between common state-of-the-art literature, as reported in [Potla et al.](https://doi.org/10.1016/j.ocarto.2020.100131) and [Qiagen analysis guidelines](https://www.qiagen.com/us/resources/resourcedetail?id=bea2dcfa-0a5c-47c5-afd8-8b0fe90a471a&lang=en).
 
 
 ## Requirements
