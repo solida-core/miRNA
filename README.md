@@ -31,12 +31,11 @@ conda activate MYENV_NAME
 snakemake --version
 ```
 
-##
-Steps:
-- get UMI
-- trim
-- QC
-- aln vs miRBase
-- aln vs genome
-- combine
-- discovery
+###
+The workflow consists of 6 main steps:
+1. Get UMI: Qiagen UMIs are integrated in the read sequence, near the 3' adapter. To identify the 12 bases sequence of the UMI we use UMI_tools which allow to search the adapter sequence, discard it and keep the UMI sequence, includeing it in the header of the read. 
+2. Trimming: TrimGalore is used for quality trimming and read length selection (default min read length is set to 16, max to 30). These values can be edited in the config.yaml file.
+3. QC: a QC report is generated with MultiQC, including information from FastQC, TrimGalore and Mirtrace.
+4. Mapping: reads are aligned against multiple databases. Only reads that do not map to a db undergo alignment against the succesive database. 
+5. Deduplication and Count: UMIs are used for the deduplication of mapped reads and then a table with counts for each miRNA is generated.
+6. Discovery: WORK IN PROGRESS
