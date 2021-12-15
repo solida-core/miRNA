@@ -19,7 +19,6 @@ rule fastqc:
         ">& {log}"
 
 
-
 rule fastqc_umi_extract:
     input:
         "reads/umi_extract/{sample}_umi.fastq.gz"
@@ -38,7 +37,6 @@ rule fastqc_umi_extract:
         "--outdir {params.outdir} "
         "--quiet "
         ">& {log}"
-
 
 
 rule fastqc_trimmed:
@@ -61,15 +59,14 @@ rule fastqc_trimmed:
         ">& {log}"
 
 
-
-rule mir_trace:
+rule mirtrace:
     input:
         "reads/trimmed/{sample}-trimmed.fq"
     output:
-        "mir_trace/{sample}/{sample}-mirtrace-results.json",
-        "mir_trace/{sample}/{sample}-mirtrace-stats-length.tsv",
-        "mir_trace/{sample}/{sample}-mirtrace-stats-contamination_basic.tsv",
-        "mir_trace/{sample}/{sample}-mirtrace-stats-mirna-complexity.tsv"
+        "mir_trace/{sample}/mirtrace-results.json",
+        "mir_trace/{sample}/mirtrace-stats-length.tsv",
+        "mir_trace/{sample}/mirtrace-stats-contamination_basic.tsv",
+        "mir_trace/{sample}/mirtrace-stats-mirna-complexity.tsv"
     conda:
         "../envs/mirtrace.yaml"
     params:
@@ -86,7 +83,6 @@ rule mir_trace:
         "{input} "
         "{params.params} "
         ">& {log} "
-
 
 
 rule multiqc:

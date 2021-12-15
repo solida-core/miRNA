@@ -1,10 +1,3 @@
-## TODO
-## gli allineamenti contro mirtbase mature 1 e 2 vanno sortati e mergiati
-## convertiti in bam
-## sortati e indexati
-## deduplicati
-## indexati
-## conta
 rule samtools_sam_to_bam:
     input:
         first="reads/aligned/{sample}.mirbase_mature.sam"
