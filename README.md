@@ -31,12 +31,18 @@ conda activate MYENV_NAME
 snakemake --version
 ```
 ## Run the Pipeline
+
 To run the pipeline you need to edit manually the `config.yaml` file, providing paths for your references.
 ```bash
 snakemake --configfile config.yaml --snakefile Snakefile --use-conda -d ANALYSIS_DIR
 ```
+## Generate Snakemake Report
 
-
+When the analysis is completed, you can generate a Snakemake report with analysis overview, QC report and mmiRNA counts.
+```bash
+snakemake --configfile config.yaml --snakefile Snakefile --use-conda --report [--report-stylesheet path_to/custom.css] -d ANALYSIS_DIR
+```
+This produces the `report.html` file inside the `ANALYSIS_DIR`.
 
 ## Pipeline Description
 The workflow consists of 6 main steps:
