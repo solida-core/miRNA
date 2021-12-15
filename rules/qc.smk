@@ -91,10 +91,10 @@ rule multiqc:
         expand("qc/fastqc/{sample.sample}_umi_fastqc.zip", sample=samples.reset_index().itertuples()),
         expand("qc/fastqc/{sample.sample}-trimmed_fastqc.zip", sample=samples.reset_index().itertuples()),
         expand("reads/trimmed/{sample.sample}.fastq.gz_trimming_report.txt", sample=samples.reset_index().itertuples()),
-        expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-results.json", sample=samples.reset_index().itertuples()),
-        expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-length.tsv", sample=samples.reset_index().itertuples()),
-        expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-contamination_basic.tsv", sample=samples.reset_index().itertuples()),
-        expand("mir_trace/{sample.sample}/{sample.sample}-mirtrace-stats-mirna-complexity.tsv", sample=samples.reset_index().itertuples()),
+        expand("mir_trace/{sample.sample}/mirtrace-results.json", sample=samples.reset_index().itertuples()),
+        expand("mir_trace/{sample.sample}/mirtrace-stats-length.tsv", sample=samples.reset_index().itertuples()),
+        expand("mir_trace/{sample.sample}/mirtrace-stats-contamination_basic.tsv", sample=samples.reset_index().itertuples()),
+        expand("mir_trace/{sample.sample}/mirtrace-stats-mirna-complexity.tsv", sample=samples.reset_index().itertuples()),
 #        expand("htseq/{sample.sample}.counts", sample=samples.reset_index().itertuples())
 
     output:
