@@ -51,7 +51,7 @@ rule samtools_sort:
     params:
         tmp_dir=tmp_path(path=config.get("tmp_dir")),
         genome=config.get("mirna_mature_fa"),
-        output_fmt="CRAM"
+        output_fmt="BAM"
     benchmark:
         "benchmarks/samtools/sort/{sample}.txt"
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
@@ -76,7 +76,7 @@ rule samtools_sort_second:
     params:
         tmp_dir=tmp_path(path=config.get("tmp_dir")),
         genome=config.get("mirna_mature_fa"),
-        output_fmt="CRAM"
+        output_fmt="BAM"
     benchmark:
         "benchmarks/samtools/sort/{sample}.txt"
     threads: conservative_cpu_count(reserve_cores=2, max_cores=99)
